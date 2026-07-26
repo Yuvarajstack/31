@@ -1117,8 +1117,11 @@ body.is-scrolling #grain {
 <div id="grain" aria-hidden="true"></div>
 
 <!-- ============ FLOATING MUSIC CONTROL ============ -->
+<button id="musicToggle" class="music-toggle" aria-label="Play background music" title="Play music">
+  <span class="music-toggle__icon">♪</span>
+</button>
 <!-- EDIT ME: replace src with your own song -->
-<audio id="bgMusic" loop preload="none">
+<audio id="bgMusic" loop preload="auto">
   <!-- EDIT ME: drop your song in as assets/music/bhavana.mp3 -->
   <source src="assets/music/bhavana.mp3" type="audio/mpeg">
 </audio>
@@ -1829,7 +1832,25 @@ document.getElementById("surpriseBtn").addEventListener("click", launchSurprise)
 
 /* ================================================================
    MUSIC PLAY / PAUSE TOGGLE
-   =========================================================
+   ================================================================ */
+const musicToggleBtn = document.getElementById("musicToggle");
+const bgMusicEl = document.getElementById("bgMusic");
+
+musicToggleBtn.addEventListener("click", () => {
+  if (bgMusicEl.paused) {
+    bgMusicEl.play().then(() => {
+      musicToggleBtn.classList.add("is-playing");
+      musicToggleBtn.title = "Pause music";
+    }).catch(() => {
+      /* file missing, wrong path, or blocked by the browser */
+      alert("Music couldn't play — check that assets/music/bhavana.mp3 exists in your repo and the filename matches exactly (case-sensitive).");
+    });
+  } else {
+    bgMusicEl.pause();
+    musicToggleBtn.classList.remove("is-playing");
+    musicToggleBtn.title = "Play music";
+  }
+});
 
 /* ================================================================
    EASTER EGG — press "L" anywhere to fill the screen with hearts
